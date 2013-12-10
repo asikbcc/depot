@@ -53,6 +53,27 @@ class ProductTest < ActiveSupport::TestCase
     end
   end
 
+  test "title uniqueness" do
+    product = Product.new(:title => products(:ruby).title,
+    :description => "yyy",
+    :price => 1,
+    :image_url => "fred.gif")
+
+    assert !product.save
+    assert_equal "has already been taken", product.errors[:title].join(';')
+  end
+
+  test "title uniqueness -i18" do
+    product = Product.new(:title => products(:ruby).title,
+    :description => "yyy",
+    :price => 1,
+    :image_url => "fred.gif")
+
+    assert !product.save
+    assert_equal I18n.translate('activerecord.errors.messages.taken'),
+                 product.errors[:title].join(';')
+  end
+
 
 end
 
